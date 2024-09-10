@@ -1,4 +1,6 @@
 #ifndef _WIN32_WINNT
+// WIN NEW TECHNOLOGY MINIMUM VERSION SUPPORT
+// https://learn.microsoft.com/en-us/cpp/porting/modifying-winver-and-win32-winnt?view=msvc-170
 #define _WIN32_WINNT 0x0600
 #endif
 
@@ -45,6 +47,11 @@ int main()
 
     hints.ai_family = AF_INET;
     hints.ai_socktype = SOCK_STREAM;
+    // Enabled WildCard Address.
+    // i.e., listen for incoming connections on all available network interfaces of the host machine
+    // If your machine has multiple network interfaces (e.g., a loopback address like 127.0.0.1,
+    // a private IP like 192.168.1.10, and a public IP assigned by your ISP), binding to the wildcard
+    // address means that your server will accept connections coming through any of those interfaces.
     hints.ai_flags = AI_PASSIVE;
 
     // Address info of the connection at localhost:8080
@@ -115,13 +122,13 @@ int main()
                            "Content-Type: text/plain\r\n\r\n"
                            "Local time is: ";
     int bytes_sent = send(socket_client, response, strlen(response), 0);
-    printf("Send %d bytes of %d", bytes_sent, (int)strlen(response));
+    printf("Send %d bytes of %d\n", bytes_sent, (int)strlen(response));
 
     time_t timer;
     time(&timer);
     char *time_message = ctime(&timer);
     bytes_sent = send(socket_client, time_message, strlen(time_message), 0);
-    printf("Send %d bytes of %d", bytes_sent, (int)strlen(time_message));
+    printf("Send %d bytes of %d\n", bytes_sent, (int)strlen(time_message));
 
     printf("Closing connection...\n");
     closesocket(socket_client);
